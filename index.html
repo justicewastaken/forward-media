@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forward Media — Web Design & Development</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #f5f4f1;
+    --bg3: #ededea;
+    --black: #0a0a0a;
+    --border: #e0ddd8;
+    --border2: #c8c5be;
+    --text: #1a1a1a;
+    --muted: #6b6860;
+    --muted2: #9b9890;
+    --font: 'Helvetica Now', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 64px;
+    background: rgba(255,255,255,0.93);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--font); font-weight: 700; font-size: 16px; letter-spacing: -0.02em;
+    color: var(--black); text-decoration: none; display: flex; align-items: center; gap: 3px;
+  }
+  .nav-logo .arrow { font-size: 13px; margin-left: 2px; }
+  .nav-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 400; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--black); }
+  .nav-cta {
+    background: var(--black); color: white; font-family: var(--font);
+    font-weight: 600; font-size: 13px; padding: 9px 20px; border-radius: 6px;
+    text-decoration: none; transition: background 0.2s, transform 0.15s;
+  }
+  .nav-cta:hover { background: #2a2a2a; transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 62vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center; padding: 120px 48px 64px;
+    position: relative; overflow: hidden; background: var(--bg);
+  }
+  .hero-grid-bg {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
+    opacity: 0.45;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 100px; padding: 5px 14px;
+    font-size: 11px; font-weight: 500; color: var(--muted);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 28px;
+    animation: fadeUp 0.5s ease both;
+  }
+  h1 {
+    font-family: var(--font); font-weight: 700;
+    font-size: clamp(38px, 5.5vw, 72px); line-height: 0.97;
+    letter-spacing: -0.05em; color: var(--black); max-width: 860px;
+    animation: fadeUp 0.5s 0.1s ease both;
+  }
+  h1 em {
+    font-family: 'Instrument Serif', serif; font-style: italic;
+    font-weight: 400; letter-spacing: -0.02em;
+  }
+  .hero-sub {
+    font-size: 16px; color: var(--muted); max-width: 420px;
+    margin: 18px auto 32px; font-weight: 400; line-height: 1.6;
+    animation: fadeUp 0.5s 0.2s ease both;
+  }
+  .hero-actions {
+    display: flex; gap: 12px; align-items: center;
+    animation: fadeUp 0.5s 0.3s ease both;
+  }
+  .btn-primary {
+    background: var(--black); color: white; font-family: var(--font);
+    font-weight: 600; font-size: 14px; padding: 13px 26px;
+    border-radius: 7px; text-decoration: none; transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { background: #2a2a2a; transform: translateY(-2px); }
+  .btn-ghost {
+    color: var(--muted); font-size: 14px; text-decoration: none; font-family: var(--font);
+    border: 1px solid var(--border); padding: 13px 22px;
+    border-radius: 7px; transition: all 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--black); color: var(--black); }
+
+  /* ── MARQUEE ── */
+  .strip {
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    overflow: hidden; padding: 12px 0; background: var(--bg2);
+  }
+  .marquee-track { display: flex; gap: 48px; animation: marquee 30s linear infinite; white-space: nowrap; }
+  .marquee-item {
+    font-family: var(--font); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted2);
+    display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+  }
+  .marquee-item .sep { color: var(--border2); }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ── SHARED SECTION STYLES ── */
+  section { padding: 96px 48px; max-width: 1200px; margin: 0 auto; }
+  .section-label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+    font-family: var(--font);
+  }
+  h2 {
+    font-family: var(--font); font-weight: 700;
+    font-size: clamp(34px, 4vw, 52px); letter-spacing: -0.04em;
+    line-height: 1.05; color: var(--black); margin-bottom: 14px;
+  }
+  h2 em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; }
+  .section-desc {
+    color: var(--muted); font-size: 16px; font-weight: 400;
+    max-width: 480px; line-height: 1.65; margin-bottom: 52px;
+    font-family: var(--font);
+  }
+
+  /* ── STATS ── */
+  .stats-bar {
+    display: flex; border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; margin-bottom: 80px;
+  }
+  .stat-item { flex: 1; padding: 30px 24px; border-right: 1px solid var(--border); text-align: center; }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: var(--font); font-size: 40px; font-weight: 700;
+    color: var(--black); letter-spacing: -0.05em; line-height: 1; margin-bottom: 4px;
+  }
+  .stat-label { font-size: 12px; color: var(--muted2); font-family: var(--font); }
+
+  /* ── PORTFOLIO GRID ── */
+  .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .portfolio-card {
+    background: white; border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s; cursor: pointer;
+  }
+  .portfolio-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 56px rgba(0,0,0,0.1);
+    border-color: #aaa;
+  }
+
+  /* Browser chrome */
+  .browser-chrome {
+    background: #f0eeeb; border-bottom: 1px solid var(--border);
+    padding: 9px 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .browser-dots { display: flex; gap: 5px; }
+  .browser-dots span { width: 9px; height: 9px; border-radius: 50%; }
+  .dot-r { background: #ff5f57; } .dot-y { background: #ffbd2e; } .dot-g { background: #28ca41; }
+  .browser-bar {
+    flex: 1; background: white; border: 1px solid var(--border); border-radius: 5px;
+    height: 22px; display: flex; align-items: center; padding: 0 9px; gap: 5px;
+  }
+  .browser-lock { font-size: 8px; color: var(--muted2); }
+  .browser-url { font-size: 10px; color: #555; font-family: var(--font); }
+
+  /* Screenshot frame */
+  .screenshot-wrap {
+    height: 230px; overflow: hidden; position: relative; background: var(--bg2);
+  }
+  .screenshot-wrap img {
+    width: 100%; height: 100%; object-fit: cover; object-position: top;
+    display: block; transition: transform 0.5s ease;
+  }
+  .portfolio-card:hover .screenshot-wrap img { transform: scale(1.03) translateY(-1%); }
+
+  /* Card meta */
+  .card-meta {
+    padding: 13px 15px; border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .card-title { font-family: var(--font); font-weight: 600; font-size: 13px; color: var(--black); margin-bottom: 1px; }
+  .card-tag { font-size: 11px; color: var(--muted2); font-family: var(--font); }
+  .card-arrow { font-size: 14px; color: var(--muted2); transition: transform 0.2s, color 0.2s; }
+  .portfolio-card:hover .card-arrow { transform: translate(2px, -2px); color: var(--black); }
+
+  /* ── SERVICES ── */
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: var(--border); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+  }
+  .service-item {
+    background: var(--bg); padding: 34px 30px; transition: background 0.2s;
+  }
+  .service-item:hover { background: var(--bg2); }
+  .service-icon {
+    width: 38px; height: 38px; background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 9px; display: flex; align-items: center; justify-content: center;
+    font-size: 17px; margin-bottom: 16px;
+  }
+  .service-title { font-family: var(--font); font-weight: 600; font-size: 15px; color: var(--black); margin-bottom: 8px; }
+  .service-desc { font-size: 13.5px; color: var(--muted); line-height: 1.65; font-family: var(--font); }
+
+  /* ── PROCESS ── */
+  .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 48px; }
+  .process-step { position: relative; }
+  .process-step::after { content: '→'; position: absolute; top: 7px; right: -14px; color: var(--border2); font-size: 15px; }
+  .process-step:last-child::after { display: none; }
+  .step-num {
+    font-family: var(--font); font-size: 11px; font-weight: 600;
+    color: var(--muted2); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; letter-spacing: 0.06em;
+  }
+  .step-num::before { content: ''; width: 22px; height: 1px; background: var(--border2); }
+  .step-title { font-family: var(--font); font-weight: 600; font-size: 15px; color: var(--black); margin-bottom: 8px; }
+  .step-desc { font-size: 13.5px; color: var(--muted); line-height: 1.6; font-family: var(--font); }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .testimonial {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 26px; transition: border-color 0.2s, background 0.2s;
+  }
+  .testimonial:hover { border-color: var(--black); background: white; }
+  .testimonial-stars { font-size: 12px; letter-spacing: 1px; margin-bottom: 14px; }
+  .testimonial-text { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 18px; font-style: italic; font-family: var(--font); }
+  .testimonial-author { display: flex; align-items: center; gap: 10px; }
+  .author-avatar {
+    width: 34px; height: 34px; border-radius: 50%; background: var(--black); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; font-family: var(--font); flex-shrink: 0;
+  }
+  .author-name { font-family: var(--font); font-weight: 600; font-size: 13px; color: var(--black); }
+  .author-title { font-size: 11px; color: var(--muted2); font-family: var(--font); }
+
+  /* ── CTA ── */
+  .cta-section { background: var(--black); text-align: center; padding: 100px 48px; }
+  .cta-section .section-label { color: rgba(255,255,255,0.35); }
+  .cta-section h2 { color: white; margin-bottom: 12px; }
+  .cta-section p { color: rgba(255,255,255,0.45); font-size: 17px; max-width: 420px; margin: 0 auto 36px; font-family: var(--font); }
+  .cta-btn-white {
+    background: white; color: var(--black); font-family: var(--font); font-weight: 600;
+    font-size: 14px; padding: 14px 30px; border-radius: 7px;
+    text-decoration: none; display: inline-block; transition: background 0.2s, transform 0.15s;
+  }
+  .cta-btn-white:hover { background: #eee; transform: translateY(-2px); }
+
+  /* ── FOOTER ── */
+  .footer-wrap {
+    border-top: 1px solid var(--border); max-width: 1200px; margin: 0 auto; padding: 56px 48px;
+    display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px;
+  }
+  .footer-logo-text { font-family: var(--font); font-weight: 700; font-size: 15px; color: var(--black); margin-bottom: 10px; letter-spacing: -0.02em; }
+  .footer-desc { font-size: 13px; color: var(--muted); line-height: 1.65; max-width: 200px; font-family: var(--font); }
+  .footer-col-title { font-family: var(--font); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted2); margin-bottom: 14px; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 13.5px; transition: color 0.2s; font-family: var(--font); }
+  .footer-links a:hover { color: var(--black); }
+  .footer-bottom {
+    border-top: 1px solid var(--border); max-width: 1200px; margin: 0 auto; padding: 20px 48px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; color: var(--muted2); font-family: var(--font);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .reveal.in-view { opacity: 1; transform: none; }
+
+  /* section alt bg */
+  .section-alt { background: var(--bg2); }
+  .section-alt-inner { max-width: 1200px; margin: 0 auto; padding: 96px 48px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Forward Media <span class="arrow">➤</span></a>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#testimonials">Testimonials</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get a Free Quote ➤</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-eyebrow">Web Design &amp; Development · Eau Claire, WI</div>
+  <h1>Sites that <em>work</em><br>as hard as you do</h1>
+  <p class="hero-sub">We build fast, conversion-focused websites for local businesses, contractors, and growing brands — without the agency price tag.</p>
+  <div class="hero-actions">
+    <a href="#work" class="btn-primary">See Our Work ➤</a>
+    <a href="#contact" class="btn-ghost">Talk to us →</a>
+  </div>
+</div>
+
+<!-- MARQUEE -->
+<div class="strip">
+  <div class="marquee-track">
+    <span class="marquee-item">Custom Design <span class="sep">✦</span></span>
+    <span class="marquee-item">Mobile First <span class="sep">✦</span></span>
+    <span class="marquee-item">SEO Optimized <span class="sep">✦</span></span>
+    <span class="marquee-item">Fast Delivery <span class="sep">✦</span></span>
+    <span class="marquee-item">Lead Generation <span class="sep">✦</span></span>
+    <span class="marquee-item">E-Commerce <span class="sep">✦</span></span>
+    <span class="marquee-item">Brand Identity <span class="sep">✦</span></span>
+    <span class="marquee-item">Ongoing Support <span class="sep">✦</span></span>
+    <span class="marquee-item">Custom Design <span class="sep">✦</span></span>
+    <span class="marquee-item">Mobile First <span class="sep">✦</span></span>
+    <span class="marquee-item">SEO Optimized <span class="sep">✦</span></span>
+    <span class="marquee-item">Fast Delivery <span class="sep">✦</span></span>
+    <span class="marquee-item">Lead Generation <span class="sep">✦</span></span>
+    <span class="marquee-item">E-Commerce <span class="sep">✦</span></span>
+    <span class="marquee-item">Brand Identity <span class="sep">✦</span></span>
+    <span class="marquee-item">Ongoing Support <span class="sep">✦</span></span>
+  </div>
+</div>
+
+<!-- STATS + HEADER -->
+<section>
+  <div class="stats-bar reveal">
+    <div class="stat-item"><div class="stat-num">80+</div><div class="stat-label">Sites Launched</div></div>
+    <div class="stat-item"><div class="stat-num">14</div><div class="stat-label">Days Avg. Delivery</div></div>
+    <div class="stat-item"><div class="stat-num">97%</div><div class="stat-label">Client Satisfaction</div></div>
+    <div class="stat-item"><div class="stat-num">3x</div><div class="stat-label">Avg. Lead Increase</div></div>
+  </div>
+  <div class="reveal">
+    <div class="section-label">Portfolio</div>
+    <h2>Built for <em>real</em><br>businesses</h2>
+    <p class="section-desc">Every site we ship is custom-designed, fast-loading, and built to convert visitors into customers.</p>
+  </div>
+</section>
+
+<!-- PORTFOLIO GRID -->
+<section id="work" style="padding-top: 0;">
+  <div class="portfolio-grid reveal">
+
+    <!-- 1 -->
+    <div class="portfolio-card">
+      <div class="browser-chrome">
+        <div class="browser-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <div class="browser-bar"><span class="browser-lock">🔒</span><span class="browser-url">stripe.com</span></div>
+      </div>
+      <div class="screenshot-wrap">
+        <img src="https://image.thum.io/get/width/700/crop/460/https://stripe.com" alt="Stripe website" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&h=460&fit=crop'">
+      </div>
+      <div class="card-meta">
+        <div><div class="card-title">Stripe</div><div class="card-tag">Fintech · Payments Platform</div></div>
+        <div class="card-arrow">↗</div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="portfolio-card">
+      <div class="browser-chrome">
+        <div class="browser-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <div class="browser-bar"><span class="browser-lock">🔒</span><span class="browser-url">linear.app</span></div>
+      </div>
+      <div class="screenshot-wrap">
+        <img src="https://image.thum.io/get/width/700/crop/460/https://linear.app" alt="Linear website" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1555066931-4365d14431b9?w=700&h=460&fit=crop'">
+      </div>
+      <div class="card-meta">
+        <div><div class="card-title">Linear</div><div class="card-tag">SaaS · Project Management</div></div>
+        <div class="card-arrow">↗</div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="portfolio-card">
+      <div class="browser-chrome">
+        <div class="browser-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <div class="browser-bar"><span class="browser-lock">🔒</span><span class="browser-url">vercel.com</span></div>
+      </div>
+      <div class="screenshot-wrap">
+        <img src="https://image.thum.io/get/width/700/crop/460/https://vercel.com" alt="Vercel website" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1593720213428-28a5b9e94613?w=700&h=460&fit=crop'">
+      </div>
+      <div class="card-meta">
+        <div><div class="card-title">Vercel</div><div class="card-tag">Developer Tools · Infrastructure</div></div>
+        <div class="card-arrow">↗</div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="portfolio-card">
+      <div class="browser-chrome">
+        <div class="browser-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <div class="browser-bar"><span class="browser-lock">🔒</span><span class="browser-url">framer.com</span></div>
+      </div>
+      <div class="screenshot-wrap">
+        <img src="https://image.thum.io/get/width/700/crop/460/https://framer.com" alt="Framer website" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1561070791-2526d30994b5?w=700&h=460&fit=crop'">
+      </div>
+      <div class="card-meta">
+        <div><div class="card-title">Framer</div><div class="card-tag">Design · Web Builder</div></div>
+        <div class="card-arrow">↗</div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="portfolio-card">
+      <div class="browser-chrome">
+        <div class="browser-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <div class="browser-bar"><span class="browser-lock">🔒</span><span class="browser-url">superhuman.com</span></div>
+      </div>
+      <div class="screenshot-wrap">
+        <img src="https://image.thum.io/get/width/700/crop/460/https://superhuman.com" alt="Superhuman website" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=700&h=460&fit=crop'">
+      </div>
+      <div class="card-meta">
+        <div><div class="card-title">Superhuman</div><div class="card-tag">Productivity · Email Client</div></div>
+        <div class="card-arrow">↗</div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="portfolio-card">
+      <div class="browser-chrome">
+        <div class="browser-dots"><span class="dot-r"></span><span class="dot-y"></span><span class="dot-g"></span></div>
+        <div class="browser-bar"><span class="browser-lock">🔒</span><span class="browser-url">loom.com</span></div>
+      </div>
+      <div class="screenshot-wrap">
+        <img src="https://image.thum.io/get/width/700/crop/460/https://loom.com" alt="Loom website" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1551650975-87deedd944c3?w=700&h=460&fit=crop'">
+      </div>
+      <div class="card-meta">
+        <div><div class="card-title">Loom</div><div class="card-tag">Communication · Video Messaging</div></div>
+        <div class="card-arrow">↗</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SERVICES -->
+<div class="section-alt">
+  <div class="section-alt-inner">
+    <div class="reveal">
+      <div class="section-label">What We Do</div>
+      <h2>Everything you need<br>to <em>grow</em> online</h2>
+      <p class="section-desc">From a simple landing page to a full-scale e-commerce store, we handle it all in-house.</p>
+    </div>
+    <div class="services-grid reveal" id="services">
+      <div class="service-item"><div class="service-icon">🎨</div><div class="service-title">Custom Web Design</div><div class="service-desc">No templates. Every site is designed from scratch to match your brand and convert your visitors.</div></div>
+      <div class="service-item"><div class="service-icon">⚡</div><div class="service-title">Landing Pages</div><div class="service-desc">High-converting single pages built for ads, promotions, or lead capture — live in days, not weeks.</div></div>
+      <div class="service-item"><div class="service-icon">🛒</div><div class="service-title">E-Commerce</div><div class="service-desc">Full Shopify or WooCommerce builds with product pages, checkout optimization, and integrations.</div></div>
+      <div class="service-item"><div class="service-icon">📱</div><div class="service-title">Mobile Optimization</div><div class="service-desc">Every site we build looks and performs flawlessly on phones, tablets, and every screen size.</div></div>
+      <div class="service-item"><div class="service-icon">🔍</div><div class="service-title">SEO & Speed</div><div class="service-desc">Built with clean code, fast load times, and on-page SEO so Google notices you from day one.</div></div>
+      <div class="service-item"><div class="service-icon">🔧</div><div class="service-title">Monthly Management</div><div class="service-desc">Retainers for updates, hosting, security, and edits — so you never worry about your site again.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROCESS -->
+<section>
+  <div class="reveal">
+    <div class="section-label">How It Works</div>
+    <h2>Simple process.<br><em>Real</em> results.</h2>
+  </div>
+  <div class="process-steps reveal">
+    <div class="process-step"><div class="step-num">01</div><div class="step-title">Discovery Call</div><div class="step-desc">We learn about your business, goals, and what kind of site will actually move the needle.</div></div>
+    <div class="process-step"><div class="step-num">02</div><div class="step-title">Design & Proposal</div><div class="step-desc">A custom concept and clear scope — no surprises, no hidden fees, no agency jargon.</div></div>
+    <div class="process-step"><div class="step-num">03</div><div class="step-title">Build & Revise</div><div class="step-desc">We build your site and walk through revision rounds until it's exactly right.</div></div>
+    <div class="process-step"><div class="step-num">04</div><div class="step-title">Launch & Grow</div><div class="step-desc">We go live, hand you the keys, and stay on for ongoing support as you scale.</div></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<div class="section-alt" id="testimonials">
+  <div class="section-alt-inner">
+    <div class="reveal">
+      <div class="section-label">Testimonials</div>
+      <h2>Trusted by clients.<br><em>Measured</em> by results.</h2>
+      <p class="section-desc">What clients say about working with Forward Media.</p>
+    </div>
+    <div class="testimonials-grid reveal">
+      <div class="testimonial">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"Our new site went live in 10 days and the phone started ringing the same week. They nailed the look and built something that actually brings in leads."</div>
+        <div class="testimonial-author"><div class="author-avatar">MK</div><div><div class="author-name">Mike Kowalski</div><div class="author-title">Owner, Kowalski Plumbing</div></div></div>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"They redesigned our restaurant site in under two weeks. Reservations are up, the site looks incredible, and they actually pick up the phone when I have questions."</div>
+        <div class="testimonial-author"><div class="author-avatar">SR</div><div><div class="author-name">Sofia Reyes</div><div class="author-title">Owner, Terra Trattoria</div></div></div>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"I was paying $400/month to a big agency for nothing. Forward Media built us a better site for a fraction of the cost and I actually understand what I'm getting."</div>
+        <div class="testimonial-author"><div class="author-avatar">TW</div><div><div class="author-name">Todd Weston</div><div class="author-title">Broker, Lakeside Realty</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section" id="contact">
+  <div class="section-label">Ready to Start?</div>
+  <h2>Let's build something<br>you're <em style="color:rgba(255,255,255,0.55);">proud</em> of.</h2>
+  <p>Tell us about your business and we'll put together a free custom proposal — no strings attached.</p>
+  <a href="mailto:justice@forwardmedia.co" class="cta-btn-white">Get Your Free Quote ➤</a>
+</div>
+
+<!-- FOOTER -->
+<div class="footer-wrap">
+  <div>
+    <div class="footer-logo-text">Forward Media ➤</div>
+    <div class="footer-desc">Web design & development for businesses ready to grow. Eau Claire, WI.</div>
+  </div>
+  <div>
+    <div class="footer-col-title">Services</div>
+    <ul class="footer-links">
+      <li><a href="#">Custom Web Design</a></li>
+      <li><a href="#">Landing Pages</a></li>
+      <li><a href="#">E-Commerce</a></li>
+      <li><a href="#">Monthly Management</a></li>
+      <li><a href="#">SEO & Optimization</a></li>
+    </ul>
+  </div>
+  <div>
+    <div class="footer-col-title">Industries</div>
+    <ul class="footer-links">
+      <li><a href="#">Contractors & Trades</a></li>
+      <li><a href="#">Restaurants & Bars</a></li>
+      <li><a href="#">Professional Services</a></li>
+      <li><a href="#">Health & Fitness</a></li>
+      <li><a href="#">Real Estate</a></li>
+    </ul>
+  </div>
+  <div>
+    <div class="footer-col-title">Company</div>
+    <ul class="footer-links">
+      <li><a href="#">About</a></li>
+      <li><a href="#">Our Work</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a href="#">Blog</a></li>
+    </ul>
+  </div>
+</div>
+<div class="footer-bottom">
+  <span>© 2025 Forward Media. All rights reserved.</span>
+  <span>Eau Claire, WI</span>
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        const children = e.target.querySelectorAll('.portfolio-card, .service-item, .process-step, .testimonial, .stat-item');
+        children.forEach((child, i) => {
+          setTimeout(() => {
+            child.style.opacity = '1';
+            child.style.transform = 'none';
+            child.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+          }, i * 65);
+        });
+      }
+    });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
